@@ -33,6 +33,7 @@ public class CardOrderDeliveryTest {
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
         options.addArguments("--headless");
+        options.addArgument("--remote-debugging-port=9999");
         driver = new ChromeDriver(options);
         open("http://localhost:9999");
         $("[data-test-id=date] .input__control").sendKeys(Keys.chord(SHIFT, HOME, DELETE));
