@@ -133,7 +133,16 @@ public class CardOrderDeliveryTest {
     void sendIfUseCalendarPopup() {
         $("[data-test-id=city] .input__control").setValue("Казань");
         $(".icon_name_calendar").click();
-        $$(".calendar__day").find(exactText("5")).click();
+        int dayRequired = Integer.parseInt(LocalDate.now().plusDays(7).format(DateTimeFormatter.ofPattern("dd")));
+        int monthAvailableOrder = Integer.parseInt(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("MM")));
+        int monthRequired = Integer.parseInt(LocalDate.now().plusDays(7).format(DateTimeFormatter.ofPattern("MM")));
+        int monthToday = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")));
+        if (monthRequired > monthToday){
+            if (monthAvailableOrder == monthToday) {
+                $(".calendar__title [data-step='1']").click();
+            }
+        }
+        $$(".calendar__day").find(exactText(Integer.toString(dayRequired))).click();
         $("[data-test-id=name] .input__control").setValue("Иванов Иван");
         $("[data-test-id=phone] .input__control").setValue("+71111111111");
         $(".checkbox__box").click();
