@@ -34,7 +34,6 @@ public class CardOrderDeliveryTest {
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
         options.addArguments("--headless");
-        options.addArguments("--remote-debugging-port=9999");
         driver = new ChromeDriver(options);
         open("http://localhost:9999");
         $("[data-test-id=date] .input__control").sendKeys(Keys.chord(SHIFT, HOME, DELETE));
@@ -121,7 +120,7 @@ public class CardOrderDeliveryTest {
     @Test
     void sendIfUseDropdownlistOfCities() {
         $("[data-test-id=city] .input__control").setValue("Ка");
-        $(".menu_mode_radio-check").find(String.valueOf(exactText("Казань"))).click();
+        $$(".menu-item__control").find(exactText("Казань")).click();
         $("[data-test-id=date] .input__control").setValue(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu")));
         $("[data-test-id=name] .input__control").setValue("Иванов Иван");
         $("[data-test-id=phone] .input__control").setValue("+71111111111");
@@ -130,15 +129,15 @@ public class CardOrderDeliveryTest {
         $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
     }
 
-//    @Test
-//    void sendIfUseDropdownlistOfCities() {
-//        $("[data-test-id=city] .input__control").setValue("Ка");
-//        $(".menu_mode_radio-check").find(String.valueOf(exactText("Казань"))).click();
-//        $("[data-test-id=date] .input__control").setValue(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu")));
-//        $("[data-test-id=name] .input__control").setValue("Иванов Иван");
-//        $("[data-test-id=phone] .input__control").setValue("+71111111111");
-//        $(".checkbox__box").click();
-//        $(".button").click();
-//        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
-//    }
+    @Test
+    void sendIfUseCalendarPopup() {
+        $("[data-test-id=city] .input__control").setValue("Казань");
+        $(".icon_name_calendar").click();
+        $$(".calendar__day").find(exactText("5")).click();
+        $("[data-test-id=name] .input__control").setValue("Иванов Иван");
+        $("[data-test-id=phone] .input__control").setValue("+71111111111");
+        $(".checkbox__box").click();
+        $(".button").click();
+        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+    }
 }
