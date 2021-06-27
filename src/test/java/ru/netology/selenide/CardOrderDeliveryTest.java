@@ -12,6 +12,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
@@ -116,4 +117,28 @@ public class CardOrderDeliveryTest {
         $(".button").click();
         assertEquals("rgba(255, 92, 92, 1)", $(".input_invalid").getCssValue("color"));
     }
+
+    @Test
+    void sendIfUseDropdownlistOfCities() {
+        $("[data-test-id=city] .input__control").setValue("Ка");
+        $(".menu_mode_radio-check").find(String.valueOf(exactText("Казань"))).click();
+        $("[data-test-id=date] .input__control").setValue(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu")));
+        $("[data-test-id=name] .input__control").setValue("Иванов Иван");
+        $("[data-test-id=phone] .input__control").setValue("+71111111111");
+        $(".checkbox__box").click();
+        $(".button").click();
+        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+    }
+
+//    @Test
+//    void sendIfUseDropdownlistOfCities() {
+//        $("[data-test-id=city] .input__control").setValue("Ка");
+//        $(".menu_mode_radio-check").find(String.valueOf(exactText("Казань"))).click();
+//        $("[data-test-id=date] .input__control").setValue(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu")));
+//        $("[data-test-id=name] .input__control").setValue("Иванов Иван");
+//        $("[data-test-id=phone] .input__control").setValue("+71111111111");
+//        $(".checkbox__box").click();
+//        $(".button").click();
+//        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+//    }
 }
