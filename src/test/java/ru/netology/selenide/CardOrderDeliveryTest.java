@@ -1,12 +1,8 @@
 package ru.netology.selenide;
 
 import com.codeborne.selenide.Condition;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -21,35 +17,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.openqa.selenium.Keys.*;
 
 public class CardOrderDeliveryTest {
-    private WebDriver driver;
-
-    @BeforeAll
-    static void setUpAll() {
-        WebDriverManager.chromedriver().setup();
-    }
 
     @BeforeEach
     void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--headless");
-        driver = new ChromeDriver(options);
         open("http://localhost:9999");
         $("[data-test-id=date] .input__control").sendKeys(Keys.chord(SHIFT, HOME, DELETE));
-    }
-
-    @AfterEach
-    void tearDown() {
-        driver.quit();
-        driver = null;
     }
 
     @Test
     void sendFormPassed() {
         $("[data-test-id=city] .input__control").setValue("Казань");
-        $("[data-test-id=date] .input__control").sendKeys(Keys.chord(SHIFT, HOME, DELETE));
-        $("[data-test-id=date] .input__control").setValue(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu")));
+        String date = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu"));
+        $("[data-test-id=date] .input__control").setValue(date);
         $("[data-test-id=name] .input__control").setValue("Иванов Иван");
         $("[data-test-id=phone] .input__control").setValue("+71111111111");
         $(".checkbox__box").click();
@@ -66,7 +45,8 @@ public class CardOrderDeliveryTest {
     @Test
     void sendWrongCity() {
         $("[data-test-id=city] .input__control").setValue("Ванкувер");
-        $("[data-test-id=date] .input__control").setValue(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu")));
+        String date = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu"));
+        $("[data-test-id=date] .input__control").setValue(date);
         $("[data-test-id=name] .input__control").setValue("Иванов Иван");
         $("[data-test-id=phone] .input__control").setValue("+71111111111");
         $(".checkbox__box").click();
@@ -77,7 +57,8 @@ public class CardOrderDeliveryTest {
     @Test
     void sendDateLess3Days() {
         $("[data-test-id=city] .input__control").setValue("Казань");
-        $("[data-test-id=date] .input__control").setValue(LocalDate.now().plusDays(2).format(DateTimeFormatter.ofPattern("dd.MM.uuuu")));
+        String date = LocalDate.now().plusDays(2).format(DateTimeFormatter.ofPattern("dd.MM.uuuu"));
+        $("[data-test-id=date] .input__control").setValue(date);
         $("[data-test-id=name] .input__control").setValue("Иванов Иван");
         $("[data-test-id=phone] .input__control").setValue("+71111111111");
         $(".checkbox__box").click();
@@ -88,7 +69,8 @@ public class CardOrderDeliveryTest {
     @Test
     void sendWrongName() {
         $("[data-test-id=city] .input__control").setValue("Казань");
-        $("[data-test-id=date] .input__control").setValue(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu")));
+        String date = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu"));
+        $("[data-test-id=date] .input__control").setValue(date);
         $("[data-test-id=name] .input__control").setValue("Ivanov Ivan");
         $("[data-test-id=phone] .input__control").setValue("+71111111111");
         $(".checkbox__box").click();
@@ -99,7 +81,8 @@ public class CardOrderDeliveryTest {
     @Test
     void sendWrongPhone() {
         $("[data-test-id=city] .input__control").setValue("Казань");
-        $("[data-test-id=date] .input__control").setValue(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu")));
+        String date = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu"));
+        $("[data-test-id=date] .input__control").setValue(date);
         $("[data-test-id=name] .input__control").setValue("Иванов Иван");
         $("[data-test-id=phone] .input__control").setValue("+7111111111");
         $(".checkbox__box").click();
@@ -110,7 +93,8 @@ public class CardOrderDeliveryTest {
     @Test
     void sendWithoutAgreement() {
         $("[data-test-id=city] .input__control").setValue("Казань");
-        $("[data-test-id=date] .input__control").setValue(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu")));
+        String date = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu"));
+        $("[data-test-id=date] .input__control").setValue(date);
         $("[data-test-id=name] .input__control").setValue("Иванов Иван");
         $("[data-test-id=phone] .input__control").setValue("+71111111111");
         $(".button").click();
@@ -121,7 +105,8 @@ public class CardOrderDeliveryTest {
     void sendIfUseDropdownlistOfCities() {
         $("[data-test-id=city] .input__control").setValue("Ка");
         $$(".menu-item__control").find(exactText("Казань")).click();
-        $("[data-test-id=date] .input__control").setValue(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu")));
+        String date = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu"));
+        $("[data-test-id=date] .input__control").setValue(date);
         $("[data-test-id=name] .input__control").setValue("Иванов Иван");
         $("[data-test-id=phone] .input__control").setValue("+71111111111");
         $(".checkbox__box").click();
@@ -137,7 +122,7 @@ public class CardOrderDeliveryTest {
         int monthAvailableOrder = Integer.parseInt(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("MM")));
         int monthRequired = Integer.parseInt(LocalDate.now().plusDays(7).format(DateTimeFormatter.ofPattern("MM")));
         int monthToday = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")));
-        if (monthRequired > monthToday){
+        if (monthRequired > monthToday) {
             if (monthAvailableOrder == monthToday) {
                 $(".calendar__title [data-step='1']").click();
             }
@@ -148,5 +133,19 @@ public class CardOrderDeliveryTest {
         $(".checkbox__box").click();
         $(".button").click();
         $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+    }
+
+    @Test
+    void dateMatchCheck() {
+        $("[data-test-id=city] .input__control").setValue("Казань");
+        String date = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.uuuu"));
+        $("[data-test-id=date] .input__control").setValue(date);
+        $("[data-test-id=name] .input__control").setValue("Иванов Иван");
+        $("[data-test-id=phone] .input__control").setValue("+71111111111");
+        $(".checkbox__box").click();
+        $(".button").click();
+        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+        String message = $(".notification__content").getText();
+        assertEquals("Встреча успешно забронирована на "+ date, message.strip());
     }
 }
